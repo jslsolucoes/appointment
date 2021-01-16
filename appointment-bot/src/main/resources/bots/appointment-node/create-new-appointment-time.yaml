@@ -1,0 +1,34 @@
+id: 'createNewAppointmentTime'
+type: 'node'
+before:
+   -  type: 'http-request'
+      method: 'get'
+      url: > 
+            (js)=> return `http://localhost:8081/scheduleSlots/${context.idScheduleSlot}`;
+      putOnContextAs: 'availableSlotTimes'
+components:
+   -  type: 'button-group'
+      putOnContextAs: 'idScheduleSlotTime'
+      text: 'Por favor, escolha um horario para seu agendamento.'
+      required: true
+      rendered: > 
+                  (js) -> return context.availableSlotTimes.statusCode === 200;
+      map: >
+                 (js) -> return context.availableSlotTimes.body.map((scheduleSlotTime) => {
+                    return  {
+                       value: scheduleSlotTime.idScheduleSlotTime,
+                       text: scheduleSlotTime.time,
+                       order: 1000,
+                       type: 'button'
+                    }
+                 });
+      value: >
+            (js) => if(context.exists('idScheduleSlotTime')) {
+                        return context.idScheduleSlotTime;
+                     } else {
+                        return '';
+                     }
+hasPrevious: true
+previous: 'createNewAppointmentDate'
+hasNext: true
+next: 'createNewAppointment'

@@ -1,0 +1,18 @@
+id: 'checkForAppointments'
+type: 'node'
+before:
+   -  type: 'http-request'
+      method: 'get'
+      url: > 
+            (js)=> return `http://localhost:8081/appointments/users/${context.email}`;
+      putOnContextAs: 'currentAppointmentsResponse'
+transition: auto
+hasNext: true
+next: >
+         (js) => if(context.action === 'newAppointment') {
+             return 'createNewAppointmentDate';
+         } else if(context.currentAppointmentsResponse.statusCode === 404 && context.action === 'cancelAppointment') {
+             return 'welcome';
+         } else if(context.currentAppointmentsResponse.statusCode === 200 && context.action === 'cancelAppointment') {
+             return 'confirmCancelAppointment';
+         } 

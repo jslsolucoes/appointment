@@ -1,0 +1,23 @@
+id: 'confirmCancelAppointment'
+type: 'node'
+components:
+   -  type: 'text'
+      text: >
+               (js) -> return `${context.fullName} esses foram os agendamentos encontrados`;
+   -  type: 'button-group'
+      putOnContextAs: 'idAppointmentToCancel'
+      text: 'Por favor, escolha qual dia e horario voce deseja cancelar.'
+      required: true
+      map: >
+                 (js) -> return context.currentAppointmentsResponse.body.map((appointment) => {
+                    return  {
+                       value: appointment.id,
+                       text: appointment.dateTime,
+                       order: 1000,
+                       type: 'button'
+                    }
+                 });
+hasPrevious: true
+previous: 'welcome'
+hasNext: true
+next: 'cancelAppointment'

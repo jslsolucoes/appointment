@@ -1,0 +1,30 @@
+id: 'cancelAppointment'
+type: 'node'
+before:
+   - type: 'http-request'
+     method: 'delete'
+     url: > 
+            (js)=> return `http://localhost:8081/appointments/${context.idAppointmentToCancel}`;
+     putOnContextAs: 'canceledAppointmentResponse'
+   - type: 'mail'
+     provider: 'botMailer'
+     subject: (js) => return `Agendamento para ${context.fullName}`;
+     message: (js) => return `Olá ${context.fullName}, seu agendamento na data de ${context.canceledAppointmentResponse.body.dateTime} foi cancelado com sucesso`;
+     to:
+        - (js) => return context.email;
+     execute: (js) -> return context.canceledAppointmentResponse.statusCode === 200;
+   - type: 'sms'
+     provider: 'botSms'
+     message: (js) => return `Agendamento cancelado para ${context.fullName} no dia ${context.canceledAppointmentResponse.body.dateTime}`;
+     to:
+        - (js) => return '+55' + context.phone;
+     execute: (js) -> return context.canceledAppointmentResponse.statusCode === 200;
+   - type: 'wpp'
+     provider: 'botWpp'
+     message: (js) -> return `Ola cancelamento em ${context.canceledAppointmentResponse.body.dateTime}, seja bem vindo a nossa empresa.`;
+     to:
+        - (js) => return '+55' + context.phone;
+     execute: (js) -> return context.canceledAppointmentResponse.statusCode === 200;       
+transition: auto
+hasNext: true
+next: 'welcome'

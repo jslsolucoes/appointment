@@ -1,0 +1,58 @@
+id: 'createNewAppointment'
+type: 'node'
+before:
+   - type: 'http-request'
+     url: 'http://localhost:8081/appointments'
+     method: 'post'
+     headers:
+        - name: 'Content-Type'
+          value: 'application/json'
+     body:
+        name: (js) => return context.fullName;
+        email: (js) => return context.email;
+        phone: (js) => return context.phone;
+        idScheduleSlotTime: (js) => return context.idScheduleSlotTime;
+     putOnContextAs: 'createNewAppointmentsResponse'
+   - type: 'mail'
+     provider: 'botMailer'
+     subject: (js) => return `Agendamento para ${context.fullName}`;
+     message: (js) => return `Olá ${context.fullName}, seu agendamento foi feito com sucesso`;
+     to:
+        - (js) => return context.email;
+     execute: (js) -> return context.createNewAppointmentsResponse.statusCode === 201;
+   - type: 'sms'
+     provider: 'botSms'
+     message: (js) => return `Agendamento para ${context.fullName}`;
+     to:
+        - (js) => return '+55' + context.phone;
+     execute: (js) -> return context.createNewAppointmentsResponse.statusCode === 201;
+   - type: 'wpp'
+     provider: 'botWpp'
+     message: (js) -> return `Ola ${context.fullName}, seja bem vindo a nossa empresa.`;
+     to:
+        - (js) => return '+55' + context.phone;
+     execute: (js) -> return context.createNewAppointmentsResponse.statusCode === 201;
+components:
+   -  type: 'dialog'
+      of: 'error'
+      text: > 
+               (js) -> return `Não foi possível realizar o agendamento no momento`;
+      title: 'Erro de comunicação'
+      rendered: > 
+                  (js) -> return context.createNewAppointmentsResponse.statusCode !== 201 && context.createNewAppointmentsResponse.statusCode !== 409;
+   -  type: 'dialog'
+      of: 'error'
+      text: > 
+               (js) -> return `O dia e horário acabou de ser escolhido para outro usuário`;
+      title: 'Conflito de agendamento'
+      rendered: > 
+                  (js) -> return context.createNewAppointmentsResponse.statusCode === 409;
+   -  type: 'text'
+      text: >
+               (js) -> return `Agendamento realizado com sucesso para ${context.fullName} em ${context.createNewAppointmentsResponse.body.dateTime}. Foram enviados ao seu telefone ${context.phone} e ao seu email ${context.email} confirmações relativas ao agendamento realizado`;
+      rendered: >
+                  (js) -> return context.createNewAppointmentsResponse.statusCode === 201;
+hasNext: true
+next: 'welcome'
+hasPrevious: true
+previous: 'welcome'

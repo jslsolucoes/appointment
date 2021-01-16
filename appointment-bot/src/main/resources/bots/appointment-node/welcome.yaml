@@ -1,0 +1,89 @@
+id: 'welcome'
+type: 'node'
+components:
+   -  type: 'typing'
+      text: 'Gerando formulário'
+      duration: '2s'
+   -  type: 'dialog'
+      of: 'success'
+      title: 'Confirmação de cancelamento'
+      text: >
+               (js) -> return `${context.fullName} seu agendamento para o dia ${context.canceledAppointmentResponse.body.dateTime} foi cancelado com sucesso`;
+      rendered:  > 
+                   (js) -> return context.exists('canceledAppointmentResponse') && context.canceledAppointmentResponse.statusCode === 200;
+   -  type: 'dialog'
+      of: 'info'
+      text: > 
+               (js) -> return `Não foram encontrados agendamentos a serem cancelados para o email informado ${context.email}. Confira se o seu endereço de email está correto ou se a data do agendamento já aconteceu no passado`;
+      title: 'Informação'
+      rendered: > 
+                  (js) -> return context.exists('currentAppointmentsResponse') && context.currentAppointmentsResponse.statusCode === 404 && context.action === 'cancelAppointment'; 
+   -  type: 'form'
+      title: 'Preencha os dados'
+      fields:
+         - type: 'form-field'
+           components: 
+               -  type: 'button-group'
+                  putOnContextAs: 'action'
+                  text: 'Por favor, escolha uma opção para iniciar o atendimento e preencha seu email de contato.'
+                  required: true
+                  buttons:
+                   - text: 'Queria realizar um novo agendamento'
+                     value: 'newAppointment'
+                     type: 'button'
+                   - text: 'Gostaria de cancelar um agendamento feito anteriormente'
+                     value: 'cancelAppointment'
+                     type: 'button'
+                  value: >
+                        (js) => if(context.exists('action')) {
+                                    return context.action;
+                                 } else {
+                                    return 'newAppointment';
+                                 }
+         - label: 'Nome completo'
+           type: 'form-field'
+           required: true
+           components: 
+             - type: 'input'
+               of: 'text'
+               putOnContextAs: 'fullName'
+               placeholder: 'Digite seu nome completo'
+               value: >
+                        (js) => if(context.exists('fullName')) {
+                                    return context.fullName;
+                                 } else {
+                                    return 'Jonatan Lemes';
+                                 }
+               required: true
+         - label: 'Email'
+           type: 'form-field'
+           required: true
+           components: 
+             - type: 'input'
+               of: 'email'
+               putOnContextAs: 'email'
+               placeholder: 'Digite seu email aqui'
+               value: >
+                        (js) => if(context.exists('email')) {
+                                    return context.email;
+                                 } else {
+                                    return 'jonatan@jslsolucoes.com';
+                                 }
+               required: true
+         - label: 'Número de Celular'
+           type: 'form-field'
+           required: true
+           components: 
+             - type: 'input'
+               of: 'phone'
+               putOnContextAs: 'phone'
+               placeholder: 'Digite seu número de telefone'
+               value: >
+                        (js) => if(context.exists('phone')) {
+                                    return context.phone;
+                                 } else {
+                                    return '11949703490';
+                                 }
+               required: true
+hasNext: true
+next: 'checkForAppointments'
