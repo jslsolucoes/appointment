@@ -52,7 +52,7 @@ components:
                         (js) => if(context.exists('fullName')) {
                                     return context.fullName;
                                  } else {
-                                    return 'Jonatan Lemes';
+                                    return '';
                                  }
                required: true
          - label: 'Email'
@@ -67,7 +67,7 @@ components:
                         (js) => if(context.exists('email')) {
                                     return context.email;
                                  } else {
-                                    return 'jonatan@jslsolucoes.com';
+                                    return '';
                                  }
                required: true
          - label: 'Número de Celular'
@@ -82,7 +82,7 @@ components:
                         (js) => if(context.exists('phone')) {
                                     return context.phone;
                                  } else {
-                                    return '11949703490';
+                                    return '';
                                  }
                required: true
 hasNext: true
