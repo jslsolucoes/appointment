@@ -3,6 +3,7 @@ package com.jslsolucoes.appointment.api.domain;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -18,14 +19,17 @@ public class ScheduleSlotTime {
 
 	@Id
 	@GeneratedValue(generator = "schedule_slot_time_sq", strategy = GenerationType.SEQUENCE)
+	@Column(nullable = false)
 	private Long id;
 
+	@Column(nullable = false)
 	private LocalTime time;
 
+	@Column(nullable = false)
 	private Boolean available;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_schedule_slot")
+	@JoinColumn(name = "id_schedule_slot", nullable = false)
 	private ScheduleSlot scheduleSlot;
 
 	public ScheduleSlotTime() {
@@ -34,6 +38,12 @@ public class ScheduleSlotTime {
 
 	public ScheduleSlotTime(Long id) {
 		this.id = id;
+	}
+
+	public ScheduleSlotTime(ScheduleSlot scheduleSlot,LocalTime time,Boolean available) {
+		this.time = time;
+		this.available = available;
+		this.scheduleSlot = scheduleSlot;
 	}
 
 	public ScheduleSlotTime makeUnvailable() {

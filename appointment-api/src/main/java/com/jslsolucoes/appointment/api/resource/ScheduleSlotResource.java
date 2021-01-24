@@ -1,6 +1,5 @@
 package com.jslsolucoes.appointment.api.resource;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,8 +28,7 @@ public class ScheduleSlotResource {
 
 	@GetMapping
 	public List<SchedulerSlotTO> dates() {
-		return scheduleSlotUseCase.dates(LocalDate.now(), LocalDate.now().plusDays(3)).stream()
-				.map(SchedulerSlotTO::new).collect(Collectors.toList());
+		return scheduleSlotUseCase.dates(30).stream().map(SchedulerSlotTO::new).collect(Collectors.toList());
 	}
 
 	@GetMapping("/{idScheduleSlot}")

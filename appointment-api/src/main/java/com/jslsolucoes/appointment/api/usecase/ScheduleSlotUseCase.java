@@ -3,6 +3,7 @@ package com.jslsolucoes.appointment.api.usecase;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -20,9 +21,10 @@ public class ScheduleSlotUseCase {
 		this.schedulerSlotRepo = schedulerSlotRepo;
 	}
 
-	public List<ScheduleSlot> dates(LocalDate min, LocalDate max) {
-		return Optional.of(schedulerSlotRepo.dates(min, max)).filter(Lists::isNotEmpty)
-				.orElseThrow(EntityNotFoundException::new);
+	public List<ScheduleSlot> dates(Integer maxSize) {
+		List<ScheduleSlot> scheduleSlots = schedulerSlotRepo.dates(LocalDate.now().plusDays(1)).stream().limit(maxSize)
+				.collect(Collectors.toList());
+		return Optional.of(scheduleSlots).filter(Lists::isNotEmpty).orElseThrow(EntityNotFoundException::new);
 	}
 
 	public List<ScheduleSlotTime> hours(Long idScheduleSlot) {
