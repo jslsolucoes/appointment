@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.jslsolucoes.appointment.api.Lists;
 import com.jslsolucoes.appointment.api.usecase.ConflictException;
 import com.jslsolucoes.appointment.api.usecase.EntityNotFoundException;
 
@@ -44,7 +45,7 @@ public class ExceptionHandlerResource {
 	@ExceptionHandler({ HttpMessageNotReadableException.class })
 	public @ResponseBody BadRequestResponse notFoundResponse(
 			HttpMessageNotReadableException httpMessageNotReadableException) {
-		return new BadRequestResponse(List.of("Body cannot be null"));
+		return new BadRequestResponse(Lists.of("Body cannot be null"));
 	}
 
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
