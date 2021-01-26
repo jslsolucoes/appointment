@@ -28,7 +28,7 @@ public class ScheduleSlotResource {
 
 	@GetMapping
 	public List<SchedulerSlotTO> dates() {
-		return scheduleSlotUseCase.dates(30).stream().map(SchedulerSlotTO::new).collect(Collectors.toList());
+		return scheduleSlotUseCase.dates(7).stream().map(SchedulerSlotTO::new).collect(Collectors.toList());
 	}
 
 	@GetMapping("/{idScheduleSlot}")

@@ -18,10 +18,10 @@ import com.jslsolucoes.appointment.api.domain.ScheduleSlotTime;
 @Repository
 public interface SchedulerSlotRepo extends CrudRepository<ScheduleSlot, Long> {
 
-	@Query("select slt from ScheduleSlotTime slt inner join slt.scheduleSlot sl where sl.id = :idScheduleSlot and slt.available = true")
+	@Query("select slt from ScheduleSlotTime slt inner join slt.scheduleSlot sl where sl.id = :idScheduleSlot and slt.available = true order by slt.time")
 	public List<ScheduleSlotTime> hours(@Param("idScheduleSlot") Long idScheduleSlot);
 
-	@Query("select sl from ScheduleSlot sl where sl.date > :min and sl.id in (select sl2.id from ScheduleSlotTime slt inner join slt.scheduleSlot sl2 where slt.available = true)  ")
+	@Query("select sl from ScheduleSlot sl where sl.date > :min and sl.id in (select sl2.id from ScheduleSlotTime slt inner join slt.scheduleSlot sl2 where slt.available = true) order by sl.date")
 	public List<ScheduleSlot> dates(@Param("min") LocalDate min);
 
 	@Lock(LockModeType.PESSIMISTIC_WRITE)
