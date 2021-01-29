@@ -9,7 +9,7 @@ before:
    - type: 'mail'
      provider: 'botMailer'
      subject: (js) => return `Agendamento para ${context.fullName}`;
-     message: (js) => return `Olá ${context.fullName}, seu agendamento na data de ${context.canceledAppointmentResponse.body.dateTime} foi cancelado com sucesso`;
+     message: (js) => return `Olá ${context.fullName}, seu agendamento na data de ${new Date(context.canceledAppointmentResponse.body.dateTime).toLocaleString()} foi cancelado com sucesso`;
      to:
         - (js) => return context.email;
      execute: (js) -> return context.canceledAppointmentResponse.statusCode === 200;

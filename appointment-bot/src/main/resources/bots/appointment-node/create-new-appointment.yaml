@@ -16,19 +16,19 @@ before:
    - type: 'mail'
      provider: 'botMailer'
      subject: (js) => return `Agendamento para ${context.fullName}`;
-     message: (js) => return `Olá ${context.fullName}, seu agendamento foi feito com sucesso`;
+     message: (js) -> return `Olá ${context.fullName} seu agendamento foi realizado com sucesso para ${new Date(context.createNewAppointmentsResponse.body.dateTime).toLocaleString()}.`;
      to:
         - (js) => return context.email;
      execute: (js) -> return context.createNewAppointmentsResponse.statusCode === 201;
    - type: 'sms'
      provider: 'botSms'
-     message: (js) => return `Agendamento para ${context.fullName}`;
+     message: (js) -> return `Olá ${context.fullName} seu agendamento foi realizado com sucesso para ${new Date(context.createNewAppointmentsResponse.body.dateTime).toLocaleString()}.`;
      to:
         - (js) => return '+55' + context.phone;
      execute: (js) -> return context.createNewAppointmentsResponse.statusCode === 201;
    - type: 'wpp'
      provider: 'botWpp'
-     message: (js) -> return `Ola ${context.fullName}, seja bem vindo a nossa empresa.`;
+     message: (js) -> return `Olá ${context.fullName} seu agendamento foi realizado com sucesso para ${new Date(context.createNewAppointmentsResponse.body.dateTime).toLocaleString()}. Um email e um SMS também foram enviados sobre os dados do agendamento.`;
      to:
         - (js) => return '+55' + context.phone;
      execute: (js) -> return context.createNewAppointmentsResponse.statusCode === 201;
@@ -49,7 +49,7 @@ components:
                   (js) -> return context.createNewAppointmentsResponse.statusCode === 409;
    -  type: 'text'
       text: >
-               (js) -> return `Agendamento realizado com sucesso para ${context.fullName} em ${context.createNewAppointmentsResponse.body.dateTime}. Foram enviados ao seu telefone ${context.phone} e ao seu email ${context.email} confirmações relativas ao agendamento realizado`;
+               (js) -> return `${context.fullName}, seu agendamento foi realizado com sucesso para o dia e horário ${new Date(context.createNewAppointmentsResponse.body.dateTime).toLocaleString()}. Foram enviados ao seu telefone ${context.phone} e ao seu email ${context.email} confirmações relativas ao agendamento realizado`;
       rendered: >
                   (js) -> return context.createNewAppointmentsResponse.statusCode === 201;
 hasNext: true
