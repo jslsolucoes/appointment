@@ -52,6 +52,11 @@ components:
                (js) -> return `${context.fullName}, seu agendamento foi realizado com sucesso para o dia e horário ${new Date(context.createNewAppointmentsResponse.body.dateTime).toLocaleString('pt-BR')}. Foram enviados ao seu telefone ${context.phone} e ao seu email ${context.email} confirmações relativas ao agendamento realizado`;
       rendered: >
                   (js) -> return context.createNewAppointmentsResponse.statusCode === 201;
+   -  type: 'text'
+      text: >
+               (js) -> return `${context.fullName}, não foi possível realizar o agendamento no momento por dificuldades em nossos sistemas. Por favor tente novamente voltando a pagina anterior e prosseguindo novamente`;
+      rendered: > 
+                  (js) -> return context.createNewAppointmentsResponse.statusCode !== 201 && context.createNewAppointmentsResponse.statusCode !== 409;
 hasNext: true
 next: 'welcome'
 hasPrevious: true
