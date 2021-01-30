@@ -24,7 +24,7 @@ components:
                  (js) -> return context.availableSlots.body.map((scheduleSlot) => {
                     return  {
                        value: scheduleSlot.idSchedule,
-                       text: new Date(scheduleSlot.date).toLocaleDateString(),
+                       text: new Date(scheduleSlot.date).toLocaleDateString('pt-BR'),
                        order: 1000,
                        type: 'button'
                     }

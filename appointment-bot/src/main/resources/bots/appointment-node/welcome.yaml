@@ -8,7 +8,7 @@ components:
 -  type: 'dialog'
    title: Confirmação de cancelamento
    text: |
-      (js) -> return `${context.fullName} seu agendamento para o dia ${new Date(context.canceledAppointmentResponse.body.dateTime).toLocaleString()} foi cancelado com sucesso`;
+      (js) -> return `${context.fullName} seu agendamento para o dia ${new Date(context.canceledAppointmentResponse.body.dateTime).toLocaleString('pt-BR')} foi cancelado com sucesso`;
    rendered: |
       (js) -> return context.exists('canceledAppointmentResponse') && context.canceledAppointmentResponse.statusCode === 200;
 -  type: dialog
