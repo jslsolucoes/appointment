@@ -2,7 +2,7 @@ FROM ubuntu:latest
 RUN apt-get update
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get install -y nodejs postgresql postgresql-contrib openjdk-8-jdk maven git supervisor npm dos2unix vim telnet 
-
+RUN date && date
 #pgsql
 COPY pgsql /pgsql
 RUN chmod +x /pgsql/*.sh
