@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.jslsolucoes.appointment.api.domain.Appointment;
 import com.jslsolucoes.appointment.api.usecase.AppointmentUseCase;
 
@@ -80,7 +81,7 @@ public class AppointmentResource {
 		@JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
 		public CreateAppointmentRequest(@JsonProperty("idScheduleSlotTime") final Long idScheduleSlotTime,
 				@JsonProperty("name") final String name, @JsonProperty("email") final String email,
-				@JsonProperty("phone") final Long phone) {
+				@JsonProperty("phone") @JsonDeserialize(using = PhoneDeserializer.class) final Long phone) {
 			this.idScheduleSlotTime = idScheduleSlotTime;
 			this.name = name;
 			this.email = email;
