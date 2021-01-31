@@ -4,8 +4,8 @@ components:
 -  type: typing
    text: Gerando formulário
    duration: 2s
-   of: success
 -  type: 'dialog'
+   of: success
    title: Confirmação de cancelamento
    text: |
       (js) -> return `${context.fullName} seu agendamento para o dia ${new Date(context.canceledAppointmentResponse.body.dateTime).toLocaleString('pt-BR')} foi cancelado com sucesso`;
@@ -14,12 +14,12 @@ components:
 -  type: dialog
    of: info
    text: |
-      (js) -> return `Não foram encontrados agendamentos a serem cancelados para o email informado ${context.email}. Confira se o seu endereço de email está correto ou se a data do agendamento já aconteceu no passado`;
+      (js) -> return `Não foram encontrados agendamentos futuros a serem cancelados para o email informado ${context.email}.`;
    title: Informação
    rendered: >
       (js) -> return context.exists('currentAppointmentsResponse') && context.currentAppointmentsResponse.statusCode === 404 && context.action === 'cancelAppointment';
 -  type: form
-   title: Preencha os dados
+   title: Agendamento virtual
    fields:
    -  type: form-field
       components:
@@ -38,7 +38,7 @@ components:
             (js) => if(context.exists('action')) {
                         return context.action;
                      } else {
-                        return 'newAppointment';
+                        return '';
                      }
    -  label: Nome completo
       type: form-field

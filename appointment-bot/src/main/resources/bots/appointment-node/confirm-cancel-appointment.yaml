@@ -12,7 +12,7 @@ components:
                  (js) -> return context.currentAppointmentsResponse.body.map((appointment) => {
                     return  {
                        value: appointment.id,
-                       text: appointment.dateTime,
+                       text: new Date(appointment.dateTime).toLocaleString('pt-BR'),
                        order: 1000,
                        type: 'button'
                     }
