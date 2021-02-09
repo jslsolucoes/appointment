@@ -17,6 +17,46 @@ nodes:
      type: 'node'
    - ref: 'cancel-appointment.yaml'
      type: 'node'
+   - ref: 'describe-issue.yaml'
+     type: 'node'
+machineLearning:
+   type: 'ml' 
+   models:
+     - id: 'helpDeskNaiveBayesModel'
+       provider: 'botMachineLearning'
+       type: 'naive-bayes-model'
+       dataSet: 'helpDeskDataset'
+     - id: 'helpDeskDeepLearningModel'
+       provider: 'botMachineLearning'
+       type: 'deep-learning-model'
+       dataSet: 'helpDeskDataset'
+   dataSets:
+     - id: 'helpDeskDataset'
+       type: 'declarative-dataset'
+       version: 'v2'
+       entries:
+           - text : 'Meu monitor não quer ligar, já tentei de varias maneiras'
+             label: 'hardware'
+           - text : 'Meu monitor esta piscando muito'
+             label: 'hardware'
+           - text : 'Meu computador não liga'
+             label: 'hardware'
+           - text : 'Minha impressora parou de funcionar'
+             label: 'hardware'
+           - text : 'Minha impressora nao quer ligar'
+             label: 'hardware'
+           - text : 'Minha impressora imprime apenas algumas paginas'
+             label: 'software'
+           - text : 'Não consigo abrir o word'
+             label: 'software'
+           - text : 'O sistema está apresentando bastante lentidão'
+             label: 'software'
+           - text : 'Tem uma lampada queimada na sala 403 do andar 3'
+             label: 'building'
+           - text : 'As pias do banheiro do segundo andar estao vazando agua'
+             label: 'building'
+           - text : 'A porta dos corredores não estão trancando'
+             label: 'building'
 providers:
    type: 'provider'
    mail:
@@ -41,3 +81,8 @@ providers:
         accountSid: (js) -> return env.TWILIO_ACCOUNT_SID;
         authToken: (js) -> return env.TWILIO_AUTH_TOKEN;
         from: '+14243611384'
+   ml:
+      - id: 'botMachineLearning'
+        type: 'native-ml-provider'
+        url: 'http://localhost:5000'
+        apiToken: (js) -> return env.ML_API_KEY;

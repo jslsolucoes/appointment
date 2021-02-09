@@ -1,12 +1,31 @@
 id: 'createNewAppointmentDate'
 type: 'node'
 before:
-   -  type: 'http-request'
-      method: 'get'
-      url: > 
+   - type: 'ml-classifier'
+     classify: >
+                 (js) -> return context.issueCase;
+     putOnContextAs: 'issueCaseClassification'
+     models:
+        - 'helpDeskNaiveBayesModel'
+        - 'helpDeskDeepLearningModel'
+     onDisagree: 'helpDeskNaiveBayesModel'
+   - type: 'http-request'
+     method: 'get'
+     url: > 
             (js)=> return `http://localhost:8081/scheduleSlots`;
-      putOnContextAs: 'availableSlots'
+     putOnContextAs: 'availableSlots'
 components:
+   
+   -  type: 'text'
+      text: > 
+               (js) => if(context.issueCaseClassification === 'hardware') {
+                           return 'Seu problema aparentemente está relacionado a algum problema de hardware';
+                       } else if(context.issueCaseClassification === 'software') {
+                          return 'Seu problema aparentemente está relacionado a algum problema de sofware';
+                       } else {
+                          return 'Seu problema aparentemente está relacionado a algum problema predial';
+                       }
+                       
    -  type: 'dialog'
       of: 'info'
       text: > 
@@ -14,9 +33,10 @@ components:
       title: 'Erro'
       rendered: > 
                   (js) -> return context.availableSlots.statusCode !== 200;
+   
    -  type: 'button-group'
       putOnContextAs: 'idScheduleSlot'
-      text: 'Por favor, escolha um dia para seu agendamento.'
+      text: 'Por favor, escolha um dia para a visita de um técnico.'
       required: true
       rendered: > 
                   (js) -> return context.availableSlots.statusCode === 200;
@@ -38,4 +58,4 @@ components:
 hasNext: true
 next: 'createNewAppointmentTime'
 hasPrevious: true
-previous: 'welcome'
+previous: 'describeIssue'

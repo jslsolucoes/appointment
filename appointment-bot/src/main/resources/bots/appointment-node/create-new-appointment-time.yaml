@@ -9,7 +9,7 @@ before:
 components:
    -  type: 'button-group'
       putOnContextAs: 'idScheduleSlotTime'
-      text: 'Por favor, escolha um horario para seu agendamento.'
+      text: 'Por favor, escolha um horario desejado para a visita do técnico.'
       required: true
       rendered: > 
                   (js) -> return context.availableSlotTimes.statusCode === 200;

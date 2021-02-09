@@ -1,0 +1,22 @@
+id: 'describeIssue'
+type: 'node'
+components:
+   - type: form
+     title: Agendamento virtual
+     fields:
+       - type: form-field
+         components:
+            -  type: textarea
+               putOnContextAs: issueCase
+               placeholder: 'Digite o problema pelo qual voce está passando, alguns exemplos de teste: Meu monitor esta piscando muito; Meu computador não liga; Meu monitor não quer ligar, já tentei de varias maneiras; Tem uma lampada queimada na sala de reunioes;'
+               value: |
+                  (js) => if(context.exists('issueCase')) {
+                              return context.issueCase;
+                           } else {
+                              return '';
+                           }
+               required: true
+hasNext: true
+next: 'createNewAppointmentDate'
+hasPrevious: true
+previous: 'welcome'

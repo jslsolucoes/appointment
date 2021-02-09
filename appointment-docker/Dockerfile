@@ -1,9 +1,14 @@
-FROM ubuntu:latest
-RUN apt-get update
-ENV DEBIAN_FRONTEND=noninteractive
-RUN apt-get install -y nodejs postgresql postgresql-contrib openjdk-8-jdk maven git supervisor npm dos2unix vim telnet 
+FROM ubuntu:20.04
 
-RUN date && date
+#packages
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update --fix-missing
+RUN apt-get install -y nodejs postgresql postgresql-contrib openjdk-8-jdk maven git supervisor npm dos2unix vim telnet python3 python3-pip
+RUN pip3 install --upgrade pip
+
+
+#force rebuild
+ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
 
 #pgsql
 COPY pgsql /pgsql
@@ -38,7 +43,15 @@ RUN git clone --depth 1 --single-branch --branch main https://github.com/jslsolu
 RUN cd /opt/appointment && mvn install
 COPY bot/env.properties /opt/appointment/appointment-bot/target/env.properties
 
+#build ml
+ENV FLASK_API_KEY 12345678
+COPY ml /ml
+RUN chmod +x /ml/*.sh
+RUN pip3 install flask waitress textblob tensorflow
+RUN python3 -c 'import nltk; nltk.download("punkt")'
+
 #ports
+EXPOSE 5000
 EXPOSE 5001
 EXPOSE 8080
 
