@@ -8,7 +8,7 @@ RUN pip3 install --upgrade pip
 
 
 #force rebuild
-ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
+#ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
 
 #pgsql
 COPY pgsql /pgsql
@@ -34,11 +34,9 @@ RUN cd /opt/open-chatbot && mvn install
 
 #build backend appointment api and bot
 COPY api /api
-RUN chmod +x /api/*.sh
+RUN chmod +x /api/*.sh && dos2unix /api/*.sh
 COPY bot /bot
-RUN chmod +x /bot/*.sh
-RUN dos2unix /api/*.sh
-RUN dos2unix /bot/*.sh
+RUN chmod +x /bot/*.sh && dos2unix /bot/*.sh
 RUN git clone --depth 1 --single-branch --branch main https://github.com/jslsolucoes/appointment /opt/appointment
 RUN cd /opt/appointment && mvn install
 COPY bot/env.properties /opt/appointment/appointment-bot/target/env.properties
@@ -46,7 +44,7 @@ COPY bot/env.properties /opt/appointment/appointment-bot/target/env.properties
 #build ml
 ENV FLASK_API_KEY 12345678
 COPY ml /ml
-RUN chmod +x /ml/*.sh
+RUN chmod +x /ml/*.sh && dos2unix /ml/*.sh
 RUN pip3 install flask waitress textblob tensorflow
 RUN python3 -c 'import nltk; nltk.download("punkt")'
 

@@ -85,4 +85,4 @@ providers:
       - id: 'botMachineLearning'
         type: 'native-ml-provider'
         url: 'http://localhost:5000'
-        apiToken: (js) -> return env.ML_API_KEY;
+        apiToken: '12345678'
