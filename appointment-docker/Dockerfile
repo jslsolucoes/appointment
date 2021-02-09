@@ -8,7 +8,7 @@ RUN pip3 install --upgrade pip
 
 
 #force rebuild
-#ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
+ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
 
 #pgsql
 COPY pgsql /pgsql
